@@ -29,15 +29,16 @@ impl fmt::Display for Parts {
 
 pub fn run(input: Option<String>) -> Result<FinishedStopwatch> {
     let input = input.expect("input to solve should be available for day 2");
-    let mut total = 0;
     let activity = activities::get_selection(&[Parts::Part1, Parts::Part2])?;
 
     let sw = Stopwatch::start();
+
     let re = match activity {
         Activity(Parts::Part1) => Regex::new(r"^(\d+)\1{1}$")?,
         Activity(Parts::Part2) => Regex::new(r"^(\d+)\1+$")?,
     };
 
+    let mut total = 0;
     for ids in produce_ids(&input, activity) {
         total += ids.iter().fold(0, |total, id| {
             if re.is_match(&id.to_string()).unwrap() {
