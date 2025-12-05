@@ -1,7 +1,11 @@
-use crate::Result;
-use crate::tui;
+use crate::{Result, tui};
 
-use std::{ffi::OsString, fs, io, path::Path};
+use std::{
+    ffi::OsString,
+    fs::{read_dir, read_to_string},
+    io::Result as IoResult,
+    path::Path,
+};
 
 pub fn select_input(day_number: u8) -> Result<String> {
     let available_inputs = get_day_inputs(day_number)?;
@@ -11,19 +15,19 @@ pub fn select_input(day_number: u8) -> Result<String> {
 
     let selection = tui::selection_prompt("Select the input you'd like to use", &available_inputs)?;
 
-    Ok(fs::read_to_string(format!(
+    Ok(read_to_string(format!(
         "./static/inputs/day_{day_number}/{selection}"
     ))?)
 }
 
-fn get_day_inputs(day_number: u8) -> io::Result<Vec<String>> {
+fn get_day_inputs(day_number: u8) -> Result<Vec<String>> {
     let potential_path = format!("./static/inputs/day_{day_number}");
     let dir = Path::new(potential_path.as_str());
     if !dir.is_dir() {
         return Ok(vec![]);
     }
 
-    let file_names: io::Result<Vec<OsString>> = fs::read_dir(dir)?
+    let file_names: IoResult<Vec<OsString>> = read_dir(dir)?
         .map(|res| res.map(|entry| entry.file_name()))
         .collect();
 

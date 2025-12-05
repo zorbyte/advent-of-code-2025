@@ -4,7 +4,7 @@ use crate::{
     Result,
     days::activities::{self, Activity},
     stopwatch::{FinishedStopwatch, Stopwatch},
-    tui,
+    tui::title_banner,
 };
 
 // Had to use a third party regex package because rust's built in one
@@ -51,7 +51,7 @@ pub fn run(input: Option<String>) -> Result<FinishedStopwatch> {
 
     let sw = sw.stop();
 
-    tui::title_banner(format!("Day 2 {activity} Answers").as_str());
+    title_banner(format!("Day 2 {activity} Answers").as_str());
     println!("Total: {total}");
 
     Ok(sw)

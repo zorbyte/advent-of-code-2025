@@ -5,6 +5,7 @@ use crate::{
     stopwatch::{FinishedStopwatch, Stopwatch},
     tui,
 };
+
 use instructions::{Direction, Instruction, generate_instructions};
 
 const INITIAL_DIAL_POSITION: u64 = 50;

@@ -25,6 +25,11 @@ impl<'a> Day<'a> {
 
         tui::title_banner("Stopwatch Results");
         println!("Operation took: {sw}");
+        if cfg!(debug_assertions) {
+            println!(
+                "Stopwatch results are usually faster in release mode, use 'cargo run --release' to see the difference."
+            );
+        }
 
         Ok(())
     }

@@ -1,7 +1,9 @@
 use crate::Result;
 
-use std::fmt::Display;
-use std::io::{self, Write};
+use std::{
+    fmt::Display,
+    io::{Write, stdin, stdout},
+};
 
 pub fn selection_prompt<'a, O: Display>(question: &str, options: &'a [O]) -> Result<&'a O> {
     for (idx, option) in options.iter().enumerate() {
@@ -29,15 +31,15 @@ pub fn title_banner(title: &str) {
     println!("{}\n", "=".repeat(title.len()));
 }
 
-pub fn prompt(question: &str) -> io::Result<String> {
+pub fn prompt(question: &str) -> Result<String> {
     print!("{question} > ");
     // stdout is line buffered, so unlike with println, we need
     // to manually flush before we collect input since input is
     // on the same line of the question.
-    io::stdout().flush()?;
+    stdout().flush()?;
 
     let mut buffer = String::new();
-    let stdin = io::stdin(); // We get `Stdin` here.
+    let stdin = stdin(); // We get `Stdin` here.
     stdin.read_line(&mut buffer)?;
     Ok(buffer.trim().to_owned())
 }
