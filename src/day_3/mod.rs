@@ -31,8 +31,9 @@ fn calc_joltage(input: String, digits: usize) -> u64 {
         for remaining_digits in (1_usize..=digits).rev() {
             let digits_consumed = digits - remaining_digits;
             // To start the window at the next set of batteries to check,
-            // we add the number of batteries we add the number of digits
-            // we've consumed and the number of batteries skipped.
+            // we add the number of batteries we've consumed and the number
+            // of batteries skipped together.
+            //
             // This helps us consider situations of a battery bank of
             // "987654321" in which we skip none, but we must consume more digits
             // in order to add to our battery bank's highest joltage.
