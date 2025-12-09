@@ -10,9 +10,7 @@ use instructions::{Direction, Instruction, generate_instructions};
 
 const INITIAL_DIAL_POSITION: u64 = 50;
 
-pub fn run(input: Option<String>) -> Result<FinishedStopwatch> {
-    let input = input.expect("input to solve should be available for day 1");
-
+pub fn run(input: String) -> Result<FinishedStopwatch> {
     let sw = Stopwatch::start();
     let instructions = generate_instructions(input);
     let (part_1, part_2) = find_password(instructions);

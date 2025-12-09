@@ -7,7 +7,7 @@ pub fn start_day_selector(days: &[Day]) -> Result<()> {
     day.run()
 }
 
-type Runner = fn(input: Option<String>) -> Result<FinishedStopwatch>;
+type Runner = fn(input: String) -> Result<FinishedStopwatch>;
 
 #[derive(Debug, Clone, Copy, Eq)]
 pub struct Day<'a>(u8, &'a str, Runner);
@@ -20,7 +20,12 @@ impl<'a> Day<'a> {
     fn run(&self) -> Result<()> {
         tui::title_banner(format!("Welcome to Day {}", self.0).as_str());
 
-        let input = select_input(self.0).ok();
+        let input = select_input(self.0).unwrap_or_else(|err| {
+            panic!(
+                "could not load input file for {day_num}, ensure they are present in ./static/inputs/day_{day_num}: {err}",
+                day_num = self.0
+            )
+        });
         let sw = self.2(input)?;
 
         tui::title_banner("Stopwatch Results");
@@ -48,24 +53,29 @@ impl<'a> PartialEq for Day<'a> {
     }
 }
 
-pub mod activities {
+pub mod parts {
     use crate::{Result, tui};
 
-    use std::fmt::{self, Display};
+    use std::fmt;
 
     #[derive(Debug, Copy, Clone)]
-    pub struct Activity<T: Display>(pub T);
+    pub enum Part<'a> {
+        One(&'a str),
+        Two(&'a str),
+    }
 
-    impl<T: Display> Display for Activity<T> {
+    impl fmt::Display for Part<'_> {
         fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-            self.0.fmt(f)
+            let (Part::One(s) | Part::Two(s)) = *self;
+            f.write_str(s)
         }
     }
 
-    pub fn get_selection<T: Display + Copy>(options: &[T]) -> Result<Activity<T>> {
+    pub fn get_selection<'a>(part_1: &'a str, part_2: &'a str) -> Result<Part<'a>> {
         println!();
-        let opt = tui::selection_prompt("Please select the activity", options).copied()?;
 
-        Ok(Activity(opt))
+        let options = &[Part::One(part_1), Part::Two(part_2)];
+        let opt = tui::selection_prompt("Please select what part to calculate", options)?;
+        Ok(*opt)
     }
 }

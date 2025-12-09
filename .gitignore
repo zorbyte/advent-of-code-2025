@@ -2,3 +2,4 @@ target/*
 .vscode/*
 static/inputs/*/*
 !static/inputs/*/example_*.txt
+rustc-ice-*

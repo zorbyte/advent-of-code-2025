@@ -8,21 +8,23 @@ use std::{
 };
 
 pub fn select_input(day_number: u8) -> Result<String> {
-    let available_inputs = get_day_inputs(day_number)?;
+    let dir_path = format!("./static/inputs/day_{day_number}");
+    let available_inputs = get_day_inputs(&dir_path)?;
+
     if available_inputs.is_empty() {
-        return Err(Box::from("no inputs for day"));
+        return Err(Box::from(format!(
+            "no inputs found for day {day_number} in directory {}",
+            dir_path
+        )));
     }
 
     let selection = tui::selection_prompt("Select the input you'd like to use", &available_inputs)?;
 
-    Ok(read_to_string(format!(
-        "./static/inputs/day_{day_number}/{selection}"
-    ))?)
+    Ok(read_to_string(format!("{dir_path}/{selection}"))?)
 }
 
-fn get_day_inputs(day_number: u8) -> Result<Vec<String>> {
-    let potential_path = format!("./static/inputs/day_{day_number}");
-    let dir = Path::new(potential_path.as_str());
+fn get_day_inputs(dir_path: &str) -> Result<Vec<String>> {
+    let dir = Path::new(dir_path);
     if !dir.is_dir() {
         return Ok(vec![]);
     }
