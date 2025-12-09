@@ -19,8 +19,9 @@ pub fn run(input: String) -> Result<FinishedStopwatch> {
 }
 
 fn calc_joltage(input: String, digits: usize) -> u64 {
-    // Inspired by Madelyn-of-Hell's solution.
-    // I now know a lot more comparison functions for rust lol.
+    // Thanks to Madelyn-of-Hell's solution, which helped me
+    // learn more about using comparisons on iterators in Rust
+    // and all the funky things you can do with that.
     let mut maximum_joltage = 0_u64;
     for battery_bank in input.lines() {
         let mut battery_bank_largest_joltage = 0;
