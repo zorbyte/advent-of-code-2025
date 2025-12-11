@@ -39,8 +39,6 @@ pub fn selection_prompt<'a, O: Display>(question: &str, options: &'a [O]) -> Res
                 .map(|word| word.as_str())
                 .collect::<String>();
 
-            dbg!(&typeable_option_name);
-
             if numerical_ans == idx + 1
                 || answer == typeable_option_name
                 || answer == lowercase_option_name
